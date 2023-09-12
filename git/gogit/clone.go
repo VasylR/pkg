@@ -73,18 +73,20 @@ func (g *Client) cloneBranch(ctx context.Context, url, branch string, opts repos
 		depth = 1
 	}
 	cloneOpts := &extgogit.CloneOptions{
-		URL:               url,
-		Auth:              authMethod,
-		RemoteName:        git.DefaultRemote,
-		ReferenceName:     plumbing.NewBranchReferenceName(branch),
-		SingleBranch:      g.singleBranch,
-		NoCheckout:        false,
-		Depth:             depth,
-		RecurseSubmodules: recurseSubmodules(opts.RecurseSubmodules),
-		Progress:          nil,
-		Tags:              extgogit.NoTags,
-		CABundle:          caBundle(g.authOpts),
-		ProxyOptions:      g.proxy,
+		URL:                  url,
+		Auth:                 authMethod,
+		RemoteName:           git.DefaultRemote,
+		ReferenceName:        plumbing.NewBranchReferenceName(branch),
+		SingleBranch:         g.singleBranch,
+		NoCheckout:           false,
+		Depth:                depth,
+		RecurseSubmodules:    recurseSubmodules(opts.RecurseSubmodules),
+		Progress:             nil,
+		Tags:                 extgogit.NoTags,
+		CABundle:             caBundle(g.authOpts),
+		TlsClientKey:         clientKey(g.authOpts),
+		TlsClientCertificate: clientCert(g.authOpts),
+		ProxyOptions:         g.proxy,
 	}
 
 	repo, err := extgogit.CloneContext(ctx, g.storer, g.worktreeFS, cloneOpts)
@@ -169,6 +171,8 @@ func (g *Client) cloneTag(ctx context.Context, url, tag string, opts repository.
 		Tags:         extgogit.TagFollowing,
 		CABundle:     caBundle(g.authOpts),
 		ProxyOptions: g.proxy,
+		TlsClientKey: clientKey(g.authOpts),
+		TlsClientCertificate: clientCert(g.authOpts),
 	}
 
 	repo, err := extgogit.CloneContext(ctx, g.storer, g.worktreeFS, cloneOpts)
@@ -228,6 +232,8 @@ func (g *Client) cloneCommit(ctx context.Context, url, commit string, opts repos
 		Tags:              tagStrategy,
 		CABundle:          caBundle(g.authOpts),
 		ProxyOptions:      g.proxy,
+		TlsClientKey: clientKey(g.authOpts),
+		TlsClientCertificate: clientCert(g.authOpts),
 	}
 	if opts.Branch != "" {
 		cloneOpts.SingleBranch = g.singleBranch
@@ -311,6 +317,8 @@ func (g *Client) cloneSemVer(ctx context.Context, url, semverTag string, opts re
 		Tags:              extgogit.AllTags,
 		CABundle:          caBundle(g.authOpts),
 		ProxyOptions:      g.proxy,
+		TlsClientKey:         clientKey(g.authOpts),
+		TlsClientCertificate: clientCert(g.authOpts),
 	}
 
 	repo, err := extgogit.CloneContext(ctx, g.storer, g.worktreeFS, cloneOpts)
@@ -472,6 +480,8 @@ func (g *Client) getRemoteHEAD(ctx context.Context, url string, ref plumbing.Ref
 		CABundle:      caBundle(g.authOpts),
 		PeelingOption: extgogit.AppendPeeled,
 		ProxyOptions:  g.proxy,
+		TlsClientKey:         clientKey(g.authOpts),
+		TlsClientCertificate: clientCert(g.authOpts),
 	}
 	refs, err := remote.ListContext(ctx, listOpts)
 	if err != nil {

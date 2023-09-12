@@ -98,6 +98,20 @@ func caBundle(opts *git.AuthOptions) []byte {
 	return opts.CAFile
 }
 
+func clientCert(opts *git.AuthOptions) []byte {
+	if opts == nil {
+		return nil
+	}
+	return opts.TlsClientCertificate
+}
+
+func clientKey(opts *git.AuthOptions) []byte {
+	if opts == nil {
+		return nil
+	}
+	return opts.TlsClientKey
+}
+
 // CustomPublicKeys is a wrapper around ssh.PublicKeys to help us
 // customize the ssh config. It implements ssh.AuthMethod.
 type CustomPublicKeys struct {

@@ -417,6 +417,8 @@ func (g *Client) Push(ctx context.Context, cfg repository.PushConfig) error {
 		CABundle:     caBundle(g.authOpts),
 		ProxyOptions: g.proxy,
 		Options:      cfg.Options,
+		TlsClientCertificate: clientCert(g.authOpts),
+		TlsClientKey: clientKey(g.authOpts),
 	})
 	return goGitError(err)
 }

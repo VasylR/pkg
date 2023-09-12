@@ -38,14 +38,16 @@ const (
 // AuthOptions are the authentication options for the Transport of
 // communication with a remote origin.
 type AuthOptions struct {
-	Transport   TransportType
-	Host        string
-	Username    string
-	Password    string
-	BearerToken string
-	Identity    []byte
-	KnownHosts  []byte
-	CAFile      []byte
+	Transport            TransportType
+	Host                 string
+	Username             string
+	Password             string
+	BearerToken          string
+	Identity             []byte
+	KnownHosts           []byte
+	CAFile               []byte
+	TlsClientKey         []byte
+	TlsClientCertificate []byte
 }
 
 // KexAlgos hosts the key exchange algorithms to be used for SSH connections.
